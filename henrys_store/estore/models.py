@@ -12,17 +12,26 @@ class Customer(models.Model):
     favorite_team = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return (self.name, self.favorite_team)
+        return self.name
 
 
 class Product(models.Model):
     name = models.CharField(max_length=200, null=True)
     price = models.FloatField()
     digital = models.BooleanField(default=False, null=True, blank=False)
-    # @TODO: EL - Add image
+    on_sale = models.BooleanField(default=False, null=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
 
     def __str__(self):
         return self.name
+    
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except Exception as err:
+            url = ''
+        return url
 
 
 class Order(models.Model):
@@ -34,6 +43,18 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+    # Get total number of items in cart
+    @property
+    def get_cart_item_count(self):
+        ordered_items = self.orderitem_set.all()
+        return sum([item.get_total_price for item in ordered_items])
+
+    # Get total price of items cart
+    @property
+    def get_cart_total(self):
+        ordered_items = self.orderitem_set.all()
+        return sum([item.get_total_price for item in ordered_items])
 
 
 class OrderItem(models.Model):
@@ -46,6 +67,11 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return self.product.name
+
+    @property
+    def get_total_price(self):
+        return self.product.price * self.quantity
+
 
 
 class Shipment(models.Model):

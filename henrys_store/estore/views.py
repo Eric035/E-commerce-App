@@ -1,10 +1,12 @@
 from django.shortcuts import render
+from .models import *
 
 # Create your views here.
 
 
 def estore(request):
-    return render(request, 'estore/estore.html')
+    products = Product.objects.all()
+    return render(request, 'estore/estore.html', context={'products': products})
 
 
 def checkout(request):
@@ -12,4 +14,11 @@ def checkout(request):
 
 
 def cart(request):
-    return render(request, 'estore/cart.html')
+    items = []
+    if request.user.authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(
+            customer=customer, delivered=False)
+        items = order.orderitem_set.all()
+
+    return render(request, 'estore/cart.html', context={'items': items})
