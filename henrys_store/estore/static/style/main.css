@@ -1,0 +1,35 @@
+body {
+  background-color: #fff;
+}
+
+.nav-bar .nav-menu {
+  border: 1px solid #e7e7e7;
+  background-color: #f3f3f3;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.nav-item {
+  float: left;
+}
+
+.nav-item a {
+  display: block;
+  color: #000000;
+  text-align: center;
+  padding: 10px 14px;
+  text-decoration: none;
+}
+
+.nav-item .cart-btn img {
+  width: 20px;
+  height: 20px;
+  overflow: hidden;
+}
+
+/* Change the link color to #111 (black) on hover */
+.nav-item a:hover {
+  background-color: #008000;
+}
